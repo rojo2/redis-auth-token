@@ -1,5 +1,5 @@
 const {expect} = require("chai");
-const redisAuth = require("../auth-token");
+const redisAuth = require("../auth-token")();
 
 describe("Redis Auth Token", function() {
 

@@ -1,4 +1,6 @@
 # Redis Auth Token
+![Travis CI](https://travis-ci.org/rojo2/redis-auth-token.svg?branch=master)
+
 
 ```javascript
 const auth = require("redis-auth-token");

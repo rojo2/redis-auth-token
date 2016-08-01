@@ -7,7 +7,7 @@ describe("Redis Auth Token", function() {
 
   it("should authenticate a user", (done) => {
 
-    redisAuth.authenticate("id", "token", 3600).then(() => {
+    redisAuth.save("id", "token", 3600).then(() => {
       done();
     }).catch((err) => {
       done(err);
@@ -59,7 +59,7 @@ describe("Redis Auth Token", function() {
 
   it("should deauthenticate the user", (done) => {
 
-    redisAuth.deauthenticate("id", "token").then(() => {
+    redisAuth.remove("id", "token").then(() => {
       return redisAuth.getUserToken("id");
     }).then(({id,token,ttl}) => {
       expect(token).to.be.null;

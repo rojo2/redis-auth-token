@@ -16,10 +16,10 @@ module.exports = function(...args) {
      * @return {Promise}
      */
     getUserToken(userId) {
-      if (!userId) {
-        throw new TypeError("Invalid user id");
-      }
       return new Promise((resolve, reject) => {
+        if (!userId) {
+          return reject(new TypeError("Invalid user id"));
+        }
         client
           .multi()
           .get(userId)
@@ -39,10 +39,10 @@ module.exports = function(...args) {
      * @return {Promise}
      */
     getUserId(userToken) {
-      if (!userToken) {
-        throw new TypeError("Invalid user token");
-      }
       return new Promise((resolve, reject) => {
+        if (!userToken) {
+          return reject(new TypeError("Invalid user token"));
+        }
         client
           .multi()
           .get(userToken)
@@ -64,16 +64,16 @@ module.exports = function(...args) {
      * @return {Promise}
      */
     update(userId, userToken, duration = DEFAULT_DURATION) {
-      if (!userId) {
-        throw new TypeError("Invalid user id");
-      }
-      if (!userToken) {
-        throw new TypeError("Invalid user token");
-      }
-      if (!duration) {
-        throw new TypeError("Invalid token duration");
-      }
       return new Promise((resolve, reject) => {
+        if (!userId) {
+          return reject(new TypeError("Invalid user id"));
+        }
+        if (!userToken) {
+          return reject(new TypeError("Invalid user token"));
+        }
+        if (!duration) {
+          return reject(new TypeError("Invalid token duration"));
+        }
         client
           .multi()
           .expire(userId, duration)
@@ -87,27 +87,28 @@ module.exports = function(...args) {
       });
     },
     /**
-     * Authenticates the user.
+     * Saves user/token data.
      *
      * @param {String} userId
      * @param {String} userToken
      * @param {Number} duration
      * @return {Promise}
      */
-    authenticate(userId, userToken, duration = DEFAULT_DURATION) {
-      if (!userId) {
-        throw new TypeError("Invalid user id");
-      }
-      if (!userToken) {
-        throw new TypeError("Invalid user token");
-      }
-      if (!duration) {
-        throw new TypeError("Invalid token duration");
-      }
+    save(userId, userToken, duration = DEFAULT_DURATION) {
       return new Promise((resolve, reject) => {
+        if (!userId) {
+          return reject(new TypeError("Invalid user id"));
+        }
+        if (!userToken) {
+          return reject(new TypeError("Invalid user token"));
+        }
+        if (!duration) {
+          return reject(new TypeError("Invalid token duration"));
+        }
         client
           .multi()
-          .mset(userId, userToken, userToken, userId)
+          .set(userId, userToken)
+          .set(userToken, userId)
           .expire(userId, duration)
           .expire(userToken, duration)
           .exec((err, replies) => {
@@ -119,24 +120,24 @@ module.exports = function(...args) {
       });
     },
     /**
-     * Deauthenticates the user.
+     * Removes user/token data.
      *
      * @param {String} userId
      * @param {String} userToken
      * @param {Number} duration
      * @return {Promise}
      */
-    deauthenticate(userId, userToken, duration = DEFAULT_DURATION) {
-      if (!userId) {
-        throw new TypeError("Invalid user id");
-      }
-      if (!userToken) {
-        throw new TypeError("Invalid user token");
-      }
-      if (!duration) {
-        throw new TypeError("Invalid token duration");
-      }
+    remove(userId, userToken, duration = DEFAULT_DURATION) {
       return new Promise((resolve, reject) => {
+        if (!userId) {
+          return reject(new TypeError("Invalid user id"));
+        }
+        if (!userToken) {
+          return reject(new TypeError("Invalid user token"));
+        }
+        if (!duration) {
+          return reject(new TypeError("Invalid token duration"));
+        }
         client
           .multi()
           .del(userId)
